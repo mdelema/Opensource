@@ -51,7 +51,7 @@ TriggeredBy: ● docker.socket
              └─24321 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
 La instalación de Docker ahora le proporcionará no solo el servicio de Docker (demonio) sino también la utilidad de línea de comandos docker o el cliente de Docker. Más adelante, exploraremos la forma de usar el comando docker en este tutorial.
 
-# Paso 2 : Ejecutar el comando Docker sin sudo (opcional)
+### Paso 2 : Ejecutar el comando Docker sin sudo (opcional)
 Por defecto, el comando docker solo puede ser ejecutado por el usuario root o un usuario del grupo docker, que se crea automáticamente durante el proceso de instalación de Docker. Si intenta ejecutar el comando docker sin sudo como prefijo o sin formar parte del grupo docker, obtendrá un resultado como este:
 
 Output
@@ -77,7 +77,7 @@ Para el resto de este artículo, se supone que ejecutará el comando docker como
 
 A continuación, exploremos el comando docker.
 
-# Paso 3: Usar el comando docker
+### Paso 3: Usar el comando docker
 El uso de docker consiste en pasar a este una cadena de opciones y comandos seguida de argumentos. La sintaxis adopta esta forma:
 
 docker [option] [command] [arguments]
@@ -136,7 +136,7 @@ Para ver información sobre Docker relacionada con todo el sistema, utilice lo s
 docker info
 Exploremos algunos de estos comandos. Comenzaremos trabajando con imágenes.
 
-# Paso 4: Trabajar con imágenes de Docker
+### Paso 4: Trabajar con imágenes de Docker
 Los contenedores de Docker se construyen con imágenes de Docker. Por defecto, Docker obtiene estas imágenes de Docker Hub, un registro de Docker gestionado por Docker, la empresa responsable del proyecto Docker. Cualquiera puede alojar sus imágenes en Docker Hub, de modo que la mayoría de las aplicaciones y las distribuciones de Linux que necesitará tendrán imágenes alojadas allí.
 
 Para verificar si puede acceder a imágenes y descargarlas de Docker Hub, escriba lo siguiente:
@@ -205,7 +205,7 @@ Como verá más adelante en este tutorial, las imágenes que utilice para ejecut
 
 Veamos en mayor profundidad la forma de ejecutar los contenedores.
 
-# Paso 5: Ejecutar un contenedor de Docker
+### Paso 5: Ejecutar un contenedor de Docker
 El contenedor hello-world que ejecutó en el paso anterior es un ejemplo de un contenedor que se ejecuta y se cierra tras emitir un mensaje de prueba. Los contenedores pueden ofrecer una utilidad mucho mayor y ser interactivos. Después de todo, son similares a las máquinas virtuales, aunque más flexibles con los recursos.
 
 Como ejemplo, ejecutemos un contenedor usando la imagen más reciente de Ubuntu. La combinación de los conmutadores -i y -t le proporcionan un acceso interactivo del shell al contenedor:
@@ -237,7 +237,7 @@ Para cerrar el contenedor, escriba exit a línea de comandos.
 A continuación, veremos la forma de administrar los contenedores en nuestro sistema.
 
 
-# Paso 6: Administrar contenedores de Docker
+### Paso 6: Administrar contenedores de Docker
 Después de usar Docker durante un tiempo, tendrá muchos contenedores activos (en ejecución) e inactivos en su computadora. Para ver los activos, utilice lo siguiente:
 
 docker ps
@@ -281,7 +281,7 @@ Puede iniciar un nuevo contenedor y darle un nombre usando el conmutador --name.
 
 Los contenedores pueden convertirse en imágenes que podrá usar para crear contenedores nuevos. Veamos cómo funciona esto.
 
-# Paso 7: Confirmar cambios aplicados a una imagen de Docker en un contenedor
+### Paso 7: Confirmar cambios aplicados a una imagen de Docker en un contenedor
 Cuando inicie una imagen de Docker, podrá crear, modificar y eliminar archivos del mismo modo que con una máquina virtual. Los cambios que realice solo se aplicarán al contenedor en cuestión. Podrá iniciarlo y detenerlo, pero una vez que lo destruya con el comando docker rm, los cambios se perderán por completo.
 
 En esta sección verá la forma de guardar el estado de un contenedor como una nueva imagen de Docker.
@@ -314,7 +314,7 @@ También podrá crear imágenes de un Dockerfile, lo cual le permitirá automati
 
 Ahora, compartiremos la nueva imagen con terceros para que puedan crear contenedores a partir de ella.
 
-# Paso 8: Introducir imágenes de Docker en un repositorio de Docker
+### Paso 8: Introducir imágenes de Docker en un repositorio de Docker
 El siguiente paso lógico después de crear una nueva imagen a partir de una imagen existente es compartirla con algunos de sus amigos, con todo el mundo en Docker Hub, o en otro registro de Docker al que tenga acceso. Para introducir una imagen a Docker Hub o a cualquier otro registro de Docker, deberá tener una cuenta en el sistema.
 
 En esta sección verá cómo introducir una imagen de Docker en Docker Hub. Para aprender a crear su propio registro privado de Docker, consulte Cómo configurar un registro de Docker privado en Ubuntu 14.04.
