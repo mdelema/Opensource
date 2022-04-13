@@ -1,6 +1,6 @@
-### Docker Application Container Engine
+# Docker Application Container Engine
 
-# Paso 1: Instalar Docker
+### Paso 1: Instalar Docker
 Primero, actualice su lista de paquetes existente:
 
 sudo apt update
