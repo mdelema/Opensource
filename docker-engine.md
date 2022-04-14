@@ -1,213 +1,202 @@
 # Docker Application Container Engine
-> https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-es
+
 
 #### Paso 1: Instalar Docker
 Primero, actualice su lista de paquetes existente:
+´´´ssh
+    $ sudo apt update
+´´´
 
-sudo apt update
 A continuación, instale algunos paquetes de requisitos previos que permitan a apt usar paquetes a través de HTTPS:
+´´´ssh
+    $ sudo apt install apt-transport-https ca-certificates curl software-properties-common
+´´´
 
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
 Luego, añada la clave de GPG para el repositorio oficial de Docker en su sistema:
+´´´ssh
+    $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+´´´ 
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 Agregue el repositorio de Docker a las fuentes de APT:
+´´´ssh
+    $ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+´´´
 
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
 A continuación, actualice el paquete de base de datos con los paquetes de Docker del repositorio recién agregado:
-
-sudo apt update
+´´´ssh
+    $ sudo apt update
+´´´
 Asegúrese de estar a punto de realizar la instalación desde el repositorio de Docker en lugar del repositorio predeterminado de Ubuntu:
-
-apt-cache policy docker-ce
+´´´ssh
+    $ apt-cache policy docker-ce
+    
 Si bien el número de versión de Docker puede ser distinto, verá un resultado como el siguiente:
-
-Output of apt-cache policy docker-ce
-docker-ce:
-  Installed: (none)
-  Candidate: 5:19.03.9~3-0~ubuntu-focal
-  Version table:
-     5:19.03.9~3-0~ubuntu-focal 500
-        500 https://download.docker.com/linux/ubuntu focal/stable amd64 Packages
+  Output of apt-cache policy docker-ce
+  docker-ce:
+    Installed: (none)
+    Candidate: 5:19.03.9~3-0~ubuntu-focal
+    Version table:
+       5:19.03.9~3-0~ubuntu-focal 500
+          500 https://download.docker.com/linux/ubuntu focal/stable amd64 Packages
 Observe que docker-ce no está instalado, pero la opción más viable para la instalación es del repositorio de Docker para Ubuntu 20.04 (focal).
+´´´
 
 Por último, instale Docker:
+´´´ssh
+    $ sudo apt install docker-ce
+´´´
 
-sudo apt install docker-ce
-Con esto, Docker quedará instalado, el demonio se iniciará y el proceso se habilitará para ejecutarse en el inicio. Compruebe que funcione:
-
-sudo systemctl status docker
+Compruebe que funcione:
+´´´ssh
+    $ sudo systemctl status docker
 El resultado debe ser similar al siguiente, y mostrar que el servicio está activo y en ejecución:
-
-Output
-● docker.service - Docker Application Container Engine
-     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
-     Active: active (running) since Tue 2020-05-19 17:00:41 UTC; 17s ago
-TriggeredBy: ● docker.socket
+  Output
+  ● docker.service - Docker Application Container Engine
+       Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled) 
+       Active: active (running) since Tue 2020-05-19 17:00:41 UTC; 17s ago  
+  TriggeredBy: ● docker.socket
        Docs: https://docs.docker.com
    Main PID: 24321 (dockerd)
       Tasks: 8
      Memory: 46.4M
      CGroup: /system.slice/docker.service
              └─24321 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-La instalación de Docker ahora le proporcionará no solo el servicio de Docker (demonio) sino también la utilidad de línea de comandos docker o el cliente de Docker. Más adelante, exploraremos la forma de usar el comando docker en este tutorial.
+´´´
 
 ### Paso 2 : Ejecutar el comando Docker sin sudo (opcional)
-Por defecto, el comando docker solo puede ser ejecutado por el usuario root o un usuario del grupo docker, que se crea automáticamente durante el proceso de instalación de Docker. Si intenta ejecutar el comando docker sin sudo como prefijo o sin formar parte del grupo docker, obtendrá un resultado como este:
+Por defecto, el comando docker solo puede ser ejecutado por el usuario root o un usuario del grupo docker, que se crea automáticamente durante el proceso de instalación de Docker. 
 
-Output
-docker: Cannot connect to the Docker daemon. Is the docker daemon running on this host?.
-See 'docker run --help'.
 Si desea evitar escribir sudo al ejecutar el comando docker, agregue su nombre de usuario al grupo docker:
+´´´ssh
+    $ sudo usermod -aG docker ${USER}
+´´´
 
-sudo usermod -aG docker ${USER}
 Para aplicar la nueva membresía de grupo, cierre la sesión del servidor y vuelva a iniciarla o escriba lo siguiente:
-
-su - ${USER}
+´´´ssh
+    $ su - ${USER}
+´´´
 Para continuar, se le solicitará ingresar la contraseña de su usuario.
 
 Confirme que ahora su usuario se agregó al grupo docker escribiendo lo siguiente:
+´´´ssh
+    $ id -nG
+    Output
+    sammy sudo docker
+´´´
 
-id -nG
-Output
-sammy sudo docker
 Si debe agregar al grupo docker un usuario con el que no inició sesión, declare dicho nombre de usuario de forma explícita usando lo siguiente:
-
-sudo usermod -aG docker username
-Para el resto de este artículo, se supone que ejecutará el comando docker como usuario del grupo docker. Si elige no hacerlo, incluya sudo al principio de los comandos.
-
-A continuación, exploremos el comando docker.
+´´´ssh
+    $ sudo usermod -aG docker username
+´´´
 
 ### Paso 3: Usar el comando docker
 El uso de docker consiste en pasar a este una cadena de opciones y comandos seguida de argumentos. La sintaxis adopta esta forma:
+´´´ssh
+    $ docker [option] [command] [arguments]
 
-docker [option] [command] [arguments]
 Para ver todos los subcomandos disponibles, escriba lo siguiente:
-
-docker
+´´´
+    $ docker
 A partir de Docker 19, en la lista completa de subcomandos disponibles se incluye lo siguiente:
 
-Output
-  attach      Attach local standard input, output, and error streams to a running container
-  build       Build an image from a Dockerfile
-  commit      Create a new image from a container's changes
-  cp          Copy files/folders between a container and the local filesystem
-  create      Create a new container
-  diff        Inspect changes to files or directories on a container's filesystem
-  events      Get real time events from the server
-  exec        Run a command in a running container
-  export      Export a container's filesystem as a tar archive
-  history     Show the history of an image
-  images      List images
-  import      Import the contents from a tarball to create a filesystem image
-  info        Display system-wide information
-  inspect     Return low-level information on Docker objects
-  kill        Kill one or more running containers
-  load        Load an image from a tar archive or STDIN
-  login       Log in to a Docker registry
-  logout      Log out from a Docker registry
-  logs        Fetch the logs of a container
-  pause       Pause all processes within one or more containers
-  port        List port mappings or a specific mapping for the container
-  ps          List containers
-  pull        Pull an image or a repository from a registry
-  push        Push an image or a repository to a registry
-  rename      Rename a container
-  restart     Restart one or more containers
-  rm          Remove one or more containers
-  rmi         Remove one or more images
-  run         Run a command in a new container
-  save        Save one or more images to a tar archive (streamed to STDOUT by default)
-  search      Search the Docker Hub for images
-  start       Start one or more stopped containers
-  stats       Display a live stream of container(s) resource usage statistics
-  stop        Stop one or more running containers
-  tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
-  top         Display the running processes of a container
-  unpause     Unpause all processes within one or more containers
-  update      Update configuration of one or more containers
-  version     Show the Docker version information
-  wait        Block until one or more containers stop, then print their exit codes
+  Output
+    attach      Attach local standard input, output, and error streams to a running container
+    build       Build an image from a Dockerfile
+    commit      Create a new image from a container's changes
+    cp          Copy files/folders between a container and the local filesystem
+    create      Create a new container
+    diff        Inspect changes to files or directories on a container's filesystem
+    events      Get real time events from the server
+    exec        Run a command in a running container
+    export      Export a container's filesystem as a tar archive
+    history     Show the history of an image
+    images      List images
+    import      Import the contents from a tarball to create a filesystem image
+    info        Display system-wide information
+    inspect     Return low-level information on Docker objects
+    kill        Kill one or more running containers
+    load        Load an image from a tar archive or STDIN
+    login       Log in to a Docker registry
+    logout      Log out from a Docker registry
+´´´
 
 Si desea ver las opciones disponibles para un comando específico, escriba lo siguiente:
+´´´ssh
+    $ docker docker-subcommand --help
+´´´
 
-docker docker-subcommand --help
 Para ver información sobre Docker relacionada con todo el sistema, utilice lo siguiente:
-
-docker info
-Exploremos algunos de estos comandos. Comenzaremos trabajando con imágenes.
+´´´ssh
+    $ docker info
+´´´
 
 ### Paso 4: Trabajar con imágenes de Docker
-Los contenedores de Docker se construyen con imágenes de Docker. Por defecto, Docker obtiene estas imágenes de Docker Hub, un registro de Docker gestionado por Docker, la empresa responsable del proyecto Docker. Cualquiera puede alojar sus imágenes en Docker Hub, de modo que la mayoría de las aplicaciones y las distribuciones de Linux que necesitará tendrán imágenes alojadas allí.
 
 Para verificar si puede acceder a imágenes y descargarlas de Docker Hub, escriba lo siguiente:
-
-docker run hello-world
+´´´ssh
+    $ docker run hello-world
 El resultado indicará que Docker funciona de forma correcta:
 
-Output
-Unable to find image 'hello-world:latest' locally
-latest: Pulling from library/hello-world
-0e03bdcc26d7: Pull complete
-Digest: sha256:6a65f928fb91fcfbc963f7aa6d57c8eeb426ad9a20c7ee045538ef34847f44f1
-Status: Downloaded newer image for hello-world:latest
+    Output
+  Unable to find image 'hello-world:latest' locally
+  latest: Pulling from library/hello-world
+  0e03bdcc26d7: Pull complete
+  Digest: sha256:6a65f928fb91fcfbc963f7aa6d57c8eeb426ad9a20c7ee045538ef34847f44f1
+  Status: Downloaded newer image for hello-world:latest
 
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
-
-...
+  Hello from Docker!
+  This message shows that your installation appears to be working correctly.
+  ...
+´´´
 
 Inicialmente, Docker no pudo encontrar la imagen de hello-world a nivel local. Por ello la descargó de Docker Hub, el repositorio predeterminado. Una vez que se descargó la imagen, Docker creó un contenedor a partir de ella y de la aplicación dentro del contenedor ejecutado, y mostró el mensaje.
 
 Puede buscar imágenes disponibles en Docker Hub usando el comando docker con el subcomando search. Por ejemplo, para buscar la imagen de Ubuntu, escriba lo siguiente:
+´´´ssh
+    $ docker search ubuntu
 
-docker search ubuntu
 La secuencia de comandos rastreará Docker Hub y mostrará una lista de todas las imágenes cuyo nombre coincida con la cadena de búsqueda. En este caso, el resultado será similar a lo siguiente:
 
-Output
-NAME                                                      DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
-ubuntu                                                    Ubuntu is a Debian-based Linux operating sys…   10908               [OK]
-dorowu/ubuntu-desktop-lxde-vnc                            Docker image to provide HTML5 VNC interface …   428                                     [OK]
-rastasheep/ubuntu-sshd                                    Dockerized SSH service, built on top of offi…   244                                     [OK]
-consol/ubuntu-xfce-vnc                                    Ubuntu container with "headless" VNC session…   218                                     [OK]
-ubuntu-upstart                                            Upstart is an event-based replacement for th…   108                 [OK]
-ansible/ubuntu14.04-ansible                               Ubuntu 14.04 LTS with
-...
-
-En la columna de OFFICIAL, OK indica una imagen creada y avalada por la empresa responsable del proyecto. Una vez que identifique la imagen que desearía usar, puede descargarla a su computadora usando el subcomando pull.
+  Output
+  NAME                                                      DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
+  ubuntu                                                    Ubuntu is a Debian-based Linux operating sys…   10908               [OK]
+  dorowu/ubuntu-desktop-lxde-vnc                            Docker image to provide HTML5 VNC interface …   428                                     [OK]
+  rastasheep/ubuntu-sshd                                    Dockerized SSH service, built on top of offi…   244                                     [OK]
+  consol/ubuntu-xfce-vnc                                    Ubuntu container with "headless" VNC session…   218                                     [OK]
+  ubuntu-upstart                                            Upstart is an event-based replacement for th…   108                 [OK]
+  ansible/ubuntu14.04-ansible                               Ubuntu 14.04 LTS with
+  ...
+´´´
 
 Ejecute el siguiente comando para descargar la imagen oficial de ubuntu a su ordenador:
-
-docker pull ubuntu
+´´´ssh
+    $ docker pull ubuntu
 Verá el siguiente resultado:
 
-Output
-Using default tag: latest
-latest: Pulling from library/ubuntu
-d51af753c3d3: Pull complete
-fc878cd0a91c: Pull complete
-6154df8ff988: Pull complete
-fee5db0ff82f: Pull complete
-Digest: sha256:747d2dbbaaee995098c9792d99bd333c6783ce56150d1b11e333bbceed5c54d7
-Status: Downloaded newer image for ubuntu:latest
-docker.io/library/ubuntu:latest
-Una vez descargada una imagen, puede ejecutar un contenedor usando la imagen descargada con el subcomando run. Como pudo ver en el ejemplo de hello-world, si no se descargó una imagen al ejecutarse docker con el subcomando run, el cliente de Docker descargará primero la imagen y luego ejecutará un contenedor utilizándola.
+  Output
+  Using default tag: latest
+  latest: Pulling from library/ubuntu
+  d51af753c3d3: Pull complete
+  fc878cd0a91c: Pull complete
+  6154df8ff988: Pull complete
+  fee5db0ff82f: Pull complete
+  Digest: sha256:747d2dbbaaee995098c9792d99bd333c6783ce56150d1b11e333bbceed5c54d7
+  Status: Downloaded newer image for ubuntu:latest
+  docker.io/library/ubuntu:latest
+´´´
 
 Para ver las imágenes descargadas a su computadora, escriba lo siguiente:
-
-docker images
-El resultado debe tener un aspecto similar al siguiente:
-
-Output
-REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-ubuntu              latest              1d622ef86b13        3 weeks ago         73.9MB
-hello-world         latest              bf756fb1ae65        4 months ago        13.3kB
-Como verá más adelante en este tutorial, las imágenes que utilice para ejecutar contenedores pueden modificarse y utilizarse para generar nuevas imágenes que se pueden cargar posteriormente (“introducir” es el término técnico) a Docker Hub o a otros registros de Docker.
-
-Veamos en mayor profundidad la forma de ejecutar los contenedores.
+´´´ssh
+    $ docker images
+    
+  El resultado debe tener un aspecto similar al siguiente:
+  Output
+  REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+  ubuntu              latest              1d622ef86b13        3 weeks ago         73.9MB
+  hello-world         latest              bf756fb1ae65        4 months ago        13.3kB
+´´´
 
 ### Paso 5: Ejecutar un contenedor de Docker
-El contenedor hello-world que ejecutó en el paso anterior es un ejemplo de un contenedor que se ejecuta y se cierra tras emitir un mensaje de prueba. Los contenedores pueden ofrecer una utilidad mucho mayor y ser interactivos. Después de todo, son similares a las máquinas virtuales, aunque más flexibles con los recursos.
 
 Como ejemplo, ejecutemos un contenedor usando la imagen más reciente de Ubuntu. La combinación de los conmutadores -i y -t le proporcionan un acceso interactivo del shell al contenedor:
 
@@ -366,3 +355,7 @@ unauthorized: authentication required
 Inicie sesión con docker login y repita el intento de introducción. Luego, compruebe que exista en su página de repositorios de Docker Hub.
 
 Ahora podrá usar ​​​​​​​docker ​​​​​​pull sammy​​​/​​​​ubuntu-nodejs​​​​​​​​​​​​ para introducir la imagen en una nueva máquina y usarla para ejecutar un nuevo contenedor.
+
+
+###### Pagina de Referencia
+> https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-es
