@@ -3,31 +3,31 @@
 
 #### Paso 1: Instalar Docker
 Primero, actualice su lista de paquetes existente:
-´´´ssh
+```ssh
     $ sudo apt update
-´´´
+```
 
 A continuación, instale algunos paquetes de requisitos previos que permitan a apt usar paquetes a través de HTTPS:
-´´´ssh
+```ssh
     $ sudo apt install apt-transport-https ca-certificates curl software-properties-common
-´´´
+```
 
 Luego, añada la clave de GPG para el repositorio oficial de Docker en su sistema:
-´´´ssh
+```ssh
     $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-´´´ 
+``` 
 
 Agregue el repositorio de Docker a las fuentes de APT:
-´´´ssh
+```ssh
     $ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-´´´
+```
 
 A continuación, actualice el paquete de base de datos con los paquetes de Docker del repositorio recién agregado:
-´´´ssh
+```ssh
     $ sudo apt update
-´´´
+```
 Asegúrese de estar a punto de realizar la instalación desde el repositorio de Docker en lugar del repositorio predeterminado de Ubuntu:
-´´´ssh
+```ssh
     $ apt-cache policy docker-ce
     
 Si bien el número de versión de Docker puede ser distinto, verá un resultado como el siguiente:
@@ -39,15 +39,15 @@ Si bien el número de versión de Docker puede ser distinto, verá un resultado 
        5:19.03.9~3-0~ubuntu-focal 500
           500 https://download.docker.com/linux/ubuntu focal/stable amd64 Packages
 Observe que docker-ce no está instalado, pero la opción más viable para la instalación es del repositorio de Docker para Ubuntu 20.04 (focal).
-´´´
+```
 
 Por último, instale Docker:
-´´´ssh
+```ssh
     $ sudo apt install docker-ce
-´´´
+```
 
 Compruebe que funcione:
-´´´ssh
+```ssh
     $ sudo systemctl status docker
 El resultado debe ser similar al siguiente, y mostrar que el servicio está activo y en ejecución:
   Output
@@ -61,41 +61,42 @@ El resultado debe ser similar al siguiente, y mostrar que el servicio está acti
      Memory: 46.4M
      CGroup: /system.slice/docker.service
              └─24321 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-´´´
+```
 
 ### Paso 2 : Ejecutar el comando Docker sin sudo (opcional)
 Por defecto, el comando docker solo puede ser ejecutado por el usuario root o un usuario del grupo docker, que se crea automáticamente durante el proceso de instalación de Docker. 
 
 Si desea evitar escribir sudo al ejecutar el comando docker, agregue su nombre de usuario al grupo docker:
-´´´ssh
+```ssh
     $ sudo usermod -aG docker ${USER}
-´´´
+```
 
 Para aplicar la nueva membresía de grupo, cierre la sesión del servidor y vuelva a iniciarla o escriba lo siguiente:
-´´´ssh
+```ssh
     $ su - ${USER}
-´´´
+```
 Para continuar, se le solicitará ingresar la contraseña de su usuario.
 
 Confirme que ahora su usuario se agregó al grupo docker escribiendo lo siguiente:
-´´´ssh
+```ssh
     $ id -nG
     Output
     sammy sudo docker
-´´´
+```
 
 Si debe agregar al grupo docker un usuario con el que no inició sesión, declare dicho nombre de usuario de forma explícita usando lo siguiente:
-´´´ssh
+```ssh
     $ sudo usermod -aG docker username
-´´´
+```
 
 ### Paso 3: Usar el comando docker
 El uso de docker consiste en pasar a este una cadena de opciones y comandos seguida de argumentos. La sintaxis adopta esta forma:
-´´´ssh
+```ssh
     $ docker [option] [command] [arguments]
 
 Para ver todos los subcomandos disponibles, escriba lo siguiente:
-´´´
+```
+```ssh
     $ docker
 A partir de Docker 19, en la lista completa de subcomandos disponibles se incluye lo siguiente:
 
@@ -118,22 +119,22 @@ A partir de Docker 19, en la lista completa de subcomandos disponibles se incluy
     load        Load an image from a tar archive or STDIN
     login       Log in to a Docker registry
     logout      Log out from a Docker registry
-´´´
+```
 
 Si desea ver las opciones disponibles para un comando específico, escriba lo siguiente:
-´´´ssh
+```ssh
     $ docker docker-subcommand --help
-´´´
+```
 
 Para ver información sobre Docker relacionada con todo el sistema, utilice lo siguiente:
-´´´ssh
+```ssh
     $ docker info
-´´´
+```
 
 ### Paso 4: Trabajar con imágenes de Docker
 
 Para verificar si puede acceder a imágenes y descargarlas de Docker Hub, escriba lo siguiente:
-´´´ssh
+```ssh
     $ docker run hello-world
 El resultado indicará que Docker funciona de forma correcta:
 
@@ -147,12 +148,12 @@ El resultado indicará que Docker funciona de forma correcta:
   Hello from Docker!
   This message shows that your installation appears to be working correctly.
   ...
-´´´
+```
 
 Inicialmente, Docker no pudo encontrar la imagen de hello-world a nivel local. Por ello la descargó de Docker Hub, el repositorio predeterminado. Una vez que se descargó la imagen, Docker creó un contenedor a partir de ella y de la aplicación dentro del contenedor ejecutado, y mostró el mensaje.
 
 Puede buscar imágenes disponibles en Docker Hub usando el comando docker con el subcomando search. Por ejemplo, para buscar la imagen de Ubuntu, escriba lo siguiente:
-´´´ssh
+```ssh
     $ docker search ubuntu
 
 La secuencia de comandos rastreará Docker Hub y mostrará una lista de todas las imágenes cuyo nombre coincida con la cadena de búsqueda. En este caso, el resultado será similar a lo siguiente:
@@ -166,10 +167,10 @@ La secuencia de comandos rastreará Docker Hub y mostrará una lista de todas la
   ubuntu-upstart                                            Upstart is an event-based replacement for th…   108                 [OK]
   ansible/ubuntu14.04-ansible                               Ubuntu 14.04 LTS with
   ...
-´´´
+```
 
 Ejecute el siguiente comando para descargar la imagen oficial de ubuntu a su ordenador:
-´´´ssh
+```ssh
     $ docker pull ubuntu
 Verá el siguiente resultado:
 
@@ -183,10 +184,10 @@ Verá el siguiente resultado:
   Digest: sha256:747d2dbbaaee995098c9792d99bd333c6783ce56150d1b11e333bbceed5c54d7
   Status: Downloaded newer image for ubuntu:latest
   docker.io/library/ubuntu:latest
-´´´
+```
 
 Para ver las imágenes descargadas a su computadora, escriba lo siguiente:
-´´´ssh
+```ssh
     $ docker images
     
   El resultado debe tener un aspecto similar al siguiente:
@@ -194,7 +195,7 @@ Para ver las imágenes descargadas a su computadora, escriba lo siguiente:
   REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
   ubuntu              latest              1d622ef86b13        3 weeks ago         73.9MB
   hello-world         latest              bf756fb1ae65        4 months ago        13.3kB
-´´´
+```
 
 ### Paso 5: Ejecutar un contenedor de Docker
 
