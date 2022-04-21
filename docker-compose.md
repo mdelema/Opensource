@@ -4,17 +4,18 @@
 
 > Primero, confirmamos la versión más reciente disponible en su página de versiones
 ```ssh
-    	$ sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose 
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose 
 ```
 > A continuación, estableceremos los permisos correctos para que el comando docker-compose sea ejecutable:
 ```ssh
-    	$ sudo chmod +x /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 ```
 > Para verificar que la instalación se realizó correctamente, puede ejecutar:
 ```ssh
-    	$ docker-compose --version
-	
+docker-compose --version
+```
 Visualizará un resultado similar a esto:
+```ssh
 	Output
 	docker-compose version 1.26.0, build 8a1c60f6
 ```
@@ -23,53 +24,50 @@ Visualizará un resultado similar a esto:
 
 > Comience creando un nuevo directorio en su carpeta de inicio, y luego muévalo a él:
 ```ssh
-	$ mkdir ~/compose-demo
-	$ cd ~/compose-demo
+mkdir ~/compose-demo
+cd ~/compose-demo
 ```
 > En este directorio, configure una carpeta de aplicaciones que servirá como la raíz del documento para su entorno Nginx:
 ```ssh
-	$ mkdir app
+mkdir app
 ```
 > Usando su editor de texto preferido, cree un nuevo archivo index.html en la carpeta app:
 ```ssh
-	$ nano app/index.html
+nano app/index.html
 ```
 > Coloque el siguiente contenido en este archivo:
 ```ssh
-	~/compose-demo/app/index.html
-	<!doctype html>
-	<html lang="en">
-	<head>
-    	<meta charset="utf-8">
-    	<title>Docker Compose Demo</title>
-    	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
-	</head>
-	<body>
-
-	<h1>This is a Docker Compose Demo Page.</h1>
-	<p>This content is being served by an Nginx container.</p>
-
-	</body>
-	</html>
+~/compose-demo/app/index.html
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Docker Compose Demo</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
+</head>
+<body>
+<h1>This is a Docker Compose Demo Page.</h1>
+<p>This content is being served by an Nginx container.</p>
+</body>
+</html>
 ```
 Guarde y cierre el archivo cuando termine. Si utiliza nano, puede hacerlo pulsando CTRL+X, Y e INTRO para confirmar.
 
 > A continuación, cree el archivo docker-compose.yml:
 ```ssh
-	$ nano docker-compose.yml
+nano docker-compose.yml
 ```	
 
 > Inserte el siguiente contenido en su archivo docker-compose.yml:
 ```ssh
-	docker-compose.yml
-	version: '3.7'
-	services:
-	  web:
-	    image: nginx:alpine
-	    ports:
-	      - "8000:80"
-	    volumes:
-	      - ./app:/usr/share/nginx/html
+version: '3.7'
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./app:/usr/share/nginx/html
 ```
 Guarde y cierre el archivo.
 
@@ -77,10 +75,12 @@ Guarde y cierre el archivo.
 
 > Con el archivo docker-compose.yml implementado, ahora podemos ejecutar Docker Compose para mostrar nuestro entorno. El siguiente comando descargará las imágenes Docker necesarias, creará un contenedor para el servicio web y ejecutará el entorno en contenedor en modo segundo plano:
 ```ssh
-	docker-compose up -d
-	
-> Docker Compose primero buscará la imagen definida en su sistema local, y si no puede encontrar la imagen, descargará la imagen desde Docker Hub. Verá un resultado como este:
-	Output
+docker-compose up -d
+```	
+> Docker Compose primero buscará la imagen definida en su sistema local, y si no puede encontrar la imagen, descargará la imagen desde Docker Hub. 
+Verá un resultado como este:
+```ssh
+Output
 	Creating network "compose-demo_default" with the default driver
 	Pulling web (nginx:alpine)...
 	alpine: Pulling from library/nginx
@@ -93,25 +93,30 @@ Guarde y cierre el archivo.
 	Status: Downloaded newer image for nginx:alpine
 	Creating compose-demo_web_1 ... done
 ```
-
 > Su entorno ahora está funcionando en segundo plano. Para verificar que el contenedor está activo, puede ejecutar:
 ```ssh
-	$ docker-compose ps
-
+docker-compose ps
+```
 > Este comando le mostrará información sobre los contenedores en ejecución y su estado, además de cualquier redireccionamiento de puertos en vigor actualmente:
-	Output
+```ssh
+Output
 	       Name                     Command               State          Ports        
 	----------------------------------------------------------------------------------
 	compose-demo_web_1   /docker-entrypoint.sh ngin ...   Up      0.0.0.0:8000->80/tcp
 ```
 Ahora puede acceder a la aplicación demo apuntando su servidor a 
 ```ssh
-	localhost:8000 si está ejecutando esta demo en su equipo local, o a your_server_domain_or_IP:8000 si está ejecutando esta demo en un servidor remoto.
+localhost:8000
 ```
+si está ejecutando esta demo en su equipo local, o:
+```ssh
+your_server_domain_or_IP:8000 
+```
+si está ejecutando esta demo en un servidor remoto.
 
 Verá una página como la siguiente:
 ```ssh
-	Página demo de Docker Compose
+Página demo de Docker Compose
 	Para realizar algún cambio al archivo 
 	index.html, serán recogidos automáicamente por el contenedor y se reflejarán en su navegador cuando vuelva a cargar la página.
 ```
@@ -120,9 +125,10 @@ Verá una página como la siguiente:
 
 Para verificar los registros producidos por su contenedor Nginx, puede usar el comando logs:
 ```ssh
-	$ docker-compose logs
-
+docker-compose logs
+```
 Visualizará un resultado similar a esto:
+```ssh
 	Output
 	Attaching to compose-demo_web_1
 	web_1  | /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
@@ -137,28 +143,36 @@ Visualizará un resultado similar a esto:
 
 > Si desea pausar la ejecución del entorno sin cambiar el estado actual de sus contenedores, puede usar:
 ```ssh
-	$ docker-compose pause
+docker-compose pause
+```
+```ssh
 	Output
 	Pausing compose-demo_web_1 ... done
 ```
 
 > Para reanudar la ejecución tras emitir una pausa:
 ```ssh
-	$ docker-compose unpause
+docker-compose unpause
+```
+```ssh
 	Output
 	Unpausing compose-demo_web_1 ... done
 ```
 
 > El comando stop finalizará la ejecución del contenedor, pero no destruirá ningún dato asociado con sus contenedores:
 ```ssh
-	$ docker-compose stop
+docker-compose stop
+```
+```ssh
 	Output
 	Stopping compose-demo_web_1 ... done
 ```
 
 > Si desea eliminar los contenedores, redes y volúmenes asociados con este entorno en contenedor, utilice el comando down:
 ```ssh
-	$ docker-compose down
+docker-compose down
+```
+```ssh
 	Output
 	Removing compose-demo_web_1 ... done
 	Removing network compose-demo_default
@@ -166,7 +180,9 @@ Visualizará un resultado similar a esto:
 ```
 > En el caso de que también desee eliminar la imagen base de su sistema, puede usar:
 ```ssh
-	$ docker image rm nginx:alpine
+docker image rm nginx:alpine
+```
+```ssh
 	Output
 	Untagged: nginx:alpine
 	Untagged: nginx@sha256:b89a6ccbda39576ad23fd079978c967cecc6b170db6e7ff8a769bf2259a71912
@@ -179,5 +195,5 @@ Visualizará un resultado similar a esto:
 	Nota: Consulte nuestra guía sobre Cómo instalar y usar Docker para obtener información más detallada sobre los comandos de Docker.
 ```
 
-###### Pagina de Referencia
+###### Referencia
 > https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04-es
