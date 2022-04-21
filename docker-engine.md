@@ -4,31 +4,31 @@
 #### Paso 1: Instalar Docker
 Primero, actualice su lista de paquetes existente:
 ```ssh
-    $ sudo apt update
+sudo apt update
 ```
 
 A continuación, instale algunos paquetes de requisitos previos que permitan a apt usar paquetes a través de HTTPS:
 ```ssh
-    $ sudo apt install apt-transport-https ca-certificates curl software-properties-common
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
 ```
 
 Luego, añada la clave de GPG para el repositorio oficial de Docker en su sistema:
 ```ssh
-    $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 ``` 
 
 Agregue el repositorio de Docker a las fuentes de APT:
 ```ssh
-    $ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
 ```
 
 A continuación, actualice el paquete de base de datos con los paquetes de Docker del repositorio recién agregado:
 ```ssh
-    $ sudo apt update
+sudo apt update
 ```
 Asegúrese de estar a punto de realizar la instalación desde el repositorio de Docker en lugar del repositorio predeterminado de Ubuntu:
 ```ssh
-    $ apt-cache policy docker-ce
+apt-cache policy docker-ce
 ```
 ```ssh    
 Si bien el número de versión de Docker puede ser distinto, verá un resultado como el siguiente:
@@ -44,12 +44,12 @@ Observe que docker-ce no está instalado, pero la opción más viable para la in
 
 Por último, instale Docker:
 ```ssh
-    $ sudo apt install docker-ce
+sudo apt install docker-ce
 ```
 
 Compruebe que funcione:
 ```ssh
-    $ sudo systemctl status docker
+sudo systemctl status docker
 ```
 ```ssh
 El resultado debe ser similar al siguiente, y mostrar que el servicio está activo y en ejecución:
@@ -71,18 +71,18 @@ Por defecto, el comando docker solo puede ser ejecutado por el usuario root o un
 
 Si desea evitar escribir sudo al ejecutar el comando docker, agregue su nombre de usuario al grupo docker:
 ```ssh
-    $ sudo usermod -aG docker ${USER}
+sudo usermod -aG docker ${USER}
 ```
 
 Para aplicar la nueva membresía de grupo, cierre la sesión del servidor y vuelva a iniciarla o escriba lo siguiente:
 ```ssh
-    $ su - ${USER}
+su - ${USER}
 ```
 Para continuar, se le solicitará ingresar la contraseña de su usuario.
 
 Confirme que ahora su usuario se agregó al grupo docker escribiendo lo siguiente:
 ```ssh
-    $ id -nG
+id -nG
 ```
 ```ssh
     Output
@@ -91,18 +91,18 @@ Confirme que ahora su usuario se agregó al grupo docker escribiendo lo siguient
 
 Si debe agregar al grupo docker un usuario con el que no inició sesión, declare dicho nombre de usuario de forma explícita usando lo siguiente:
 ```ssh
-    $ sudo usermod -aG docker username
+sudo usermod -aG docker username
 ```
 
 ### Paso 3: Usar el comando docker
 El uso de docker consiste en pasar a este una cadena de opciones y comandos seguida de argumentos. La sintaxis adopta esta forma:
 ```ssh
-    $ docker [option] [command] [arguments]
+docker [option] [command] [arguments]
 ```
 Para ver todos los subcomandos disponibles, escriba lo siguiente:
 
 ```ssh
-    $ docker
+docker
 ```
 ```ssh
 A partir de Docker 19, en la lista completa de subcomandos disponibles se incluye lo siguiente:
@@ -130,19 +130,19 @@ A partir de Docker 19, en la lista completa de subcomandos disponibles se incluy
 
 Si desea ver las opciones disponibles para un comando específico, escriba lo siguiente:
 ```ssh
-    $ docker docker-subcommand --help
+docker docker-subcommand --help
 ```
 
 Para ver información sobre Docker relacionada con todo el sistema, utilice lo siguiente:
 ```ssh
-    $ docker info
+docker info
 ```
 
 ### Paso 4: Trabajar con imágenes de Docker
 
 Para verificar si puede acceder a imágenes y descargarlas de Docker Hub, escriba lo siguiente:
 ```ssh
-    $ docker run hello-world
+docker run hello-world
 ```
 ```ssh
 El resultado indicará que Docker funciona de forma correcta:
@@ -163,7 +163,7 @@ Inicialmente, Docker no pudo encontrar la imagen de hello-world a nivel local. P
 
 Puede buscar imágenes disponibles en Docker Hub usando el comando docker con el subcomando search. Por ejemplo, para buscar la imagen de Ubuntu, escriba lo siguiente:
 ```ssh
-    $ docker search ubuntu
+docker search ubuntu
 ```
 La secuencia de comandos rastreará Docker Hub y mostrará una lista de todas las imágenes cuyo nombre coincida con la cadena de búsqueda. En este caso, el resultado será similar a lo siguiente:
 ```ssh
@@ -180,7 +180,7 @@ La secuencia de comandos rastreará Docker Hub y mostrará una lista de todas la
 
 Ejecute el siguiente comando para descargar la imagen oficial de ubuntu a su ordenador:
 ```ssh
-    $ docker pull ubuntu
+docker pull ubuntu
 ```
 
 Verá el siguiente resultado:
@@ -199,7 +199,7 @@ Verá el siguiente resultado:
 
 Para ver las imágenes descargadas a su computadora, escriba lo siguiente:
 ```ssh
-    $ docker images
+docker images
 ```
 El resultado debe tener un aspecto similar al siguiente:
 ```ssh
@@ -213,7 +213,7 @@ El resultado debe tener un aspecto similar al siguiente:
 
 Como ejemplo, ejecutemos un contenedor usando la imagen más reciente de Ubuntu. La combinación de los conmutadores -i y -t le proporcionan un acceso interactivo del shell al contenedor:
 ```ssh
-    $ docker run -it ubuntu
+docker run -it ubuntu
 ```
 Su símbolo del sistema debe cambiar para reflejar el hecho de que ahora trabaja dentro del contenedor y debe adoptar esta forma:
 ```ssh
@@ -228,11 +228,11 @@ Ahora puede ejecutar cualquier comando dentro del contenedor. Por ejemplo, actua
 ```
 Luego, instale cualquier aplicación en él. Probemos con Node.js:
 ```ssh
-    $ apt install nodejs
+apt install nodejs
 ```
 Con esto, se instala Node.js en el contenedor desde el repositorio oficial de Ubuntu. Cuando finalice la instalación, verifique que Node.js esté instalado:
 ```ssh
-    $ node -v
+node -v
 ```
 Verá el número de versión en su terminal:
 ```ssh
@@ -243,14 +243,14 @@ Cualquier cambio que realice dentro del contenedor solo se aplica a este.
 
 Para cerrar el contenedor, escriba
 ```ssh
-    $ exit 
+exit 
 ```
 en la línea de comandos.
 
 ### Paso 6: Administrar contenedores de Docker
 Después de usar Docker durante un tiempo, tendrá muchos contenedores activos (en ejecución) e inactivos en su computadora. Para ver los activos, utilice lo siguiente:
 ```ssh
-    $ docker ps
+docker ps
 ```
 Verá una salida similar a la siguiente:
 ```ssh
@@ -260,7 +260,7 @@ CONTAINER ID        IMAGE               COMMAND             CREATED
 
 Para ver todos los contenedores, activos e inactivos, ejecute docker ps con el conmutador -a:
 ```ssh
-    $ docker ps -a
+docker ps -a
 ```
 Visualizará un resultado similar a esto:
 ```ssh
@@ -275,13 +275,13 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 ```
 Para iniciar un contenedor detenido, utilice:
 ```ssh
-    $ docker start
+docker start
 ```
 seguido del o el nombre ID del contenedor. 
 
-Vamos a iniciar el contenedor basado en Ubuntu con el ID 1c08a7a0d0e4:
+Ej: Vamos a iniciar el contenedor basado en Ubuntu con el ID 1c08a7a0d0e4:
 ```ssh
-    $ docker start 1c08a7a0d0e4
+docker start 1c08a7a0d0e4
 ```
 El contenedor se iniciará y podrá usar docker ps para ver su estado:
 ```ssh
@@ -291,21 +291,21 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 ```
 Para detener un contenedor en funcionamiento utilice:
 ```ssh
-    $ docker stop
+docker stop
 ```
 seguido del ID o nombre del contenedor. 
-Esta vez usaremos el nombre que Docker asignó al contenedor, que es quizzical_mcnulty:
+Ej: Esta vez usaremos el nombre que Docker asignó al contenedor, que es quizzical_mcnulty:
 ```ssh
-    $ docker stop quizzical_mcnulty
+docker stop quizzical_mcnulty
 ```
 Para eliminar un contenedor:
 ```ssh
-    $ docker rm
+docker rm
 ```
 y use nuevamente el ID o el nombre del contenedor. 
-Utilice el comando docker ps -a para encontrar el ID o nombre del contenedor asociado con la imagen hello-world y elimínelo.
+Ej: Utilice el comando docker ps -a para encontrar el ID o nombre del contenedor asociado con la imagen hello-world y elimínelo.
 ```ssh
-    $ docker rm youthful_curie
+docker rm youthful_curie
 ```
 Puede iniciar un nuevo contenedor y darle un nombre usando el conmutador --name. También podrá usar el conmutador de --rm para crear un contenedor que se elimine de forma automática cuando se detenga. Consulte el comando docker run help para obtener más información sobre estas y otras opciones.
 
@@ -313,19 +313,19 @@ Puede iniciar un nuevo contenedor y darle un nombre usando el conmutador --name.
 
 Confirme los cambios en una nueva instancia de imagen de Docker utilizando el siguiente comando:
 ```ssh
-    $ docker commit -m "What you did to the image" -a "Author Name" container_id repository/new_image_name
+docker commit -m "What you did to the image" -a "Author Name" container_id repository/new_image_name
 ```
 El conmutador -m es para el mensaje de confirmación que le permite a usted y a otros a saber qué cambios realizaron, mientras que -a se utiliza para especificar el autor. El container_id es el que observó anteriormente en el tutorial cuando inició la sesión interactiva de Docker.
 
 Por ejemplo, para el usuario sammy, con el ID de contenedor d9b100f26f636, el comando sería el siguiente:
 ```ssh
-    $ docker commit -m "added Node.js" -a "sammy" d9b100f2f636 sammy/ubuntu-nodejs
+docker commit -m "added Node.js" -a "sammy" d9b100f2f636 sammy/ubuntu-nodejs
 ```
 Cuando confirme una imagen, la nueva imagen se guardará a nivel local en su computadora. 
 
 Listar las imágenes de Docker de nuevo mostrará la nueva imagen, así como la anterior de la que se derivó:
 ```ssh
-    $ docker images
+docker images
 ```
 Verá resultados como este:
 ```ssh
@@ -340,21 +340,21 @@ En este ejemplo ubuntu-nodejs es la nueva imagen, derivada de la imagen ubuntu e
 
 Para introducir su imagen, primero inicie sesión en Docker Hub.
 ```ssh
-    $ docker login -u docker-registry-username
+docker login -u docker-registry-username
 ```
 Se le solicitará autenticarse usando su contraseña de Docker Hub. Si especificó la contraseña correcta, la autenticación tendrá éxito.
 
 Nota: Si su nombre de usuario de registro de Docker es diferente del nombre de usuario local que usó para crear la imagen, deberá etiquetar su imagen con su nombre de usuario de registro. Para el ejemplo que se muestra en el último paso, deberá escribir lo siguiente:
 ```ssh
-    $ docker tag sammy/ubuntu-nodejs docker-registry-username/ubuntu-nodejs
+docker tag sammy/ubuntu-nodejs docker-registry-username/ubuntu-nodejs
 ```
 Luego podrá introducir su propia imagen usando lo siguiente:
 ```ssh
-    $ docker push docker-registry-username/docker-image-name
+docker push docker-registry-username/docker-image-name
 ```
 Para introducir la imagen ubuntu-nodejs en el repositorio de sammy, el comando sería el siguiente:
 ```ssh
-    $ docker push sammy/ubuntu-nodejs
+docker push sammy/ubuntu-nodejs
 ```
 El proceso puede tardar un tiempo en completarse cuando se suben las imágenes, pero una vez que finalice el resultado será el siguiente:
 ```ssh
@@ -386,5 +386,5 @@ unauthorized: authentication required
 Inicie sesión con docker login y repita el intento de introducción. Luego, compruebe que exista en su página de repositorios de Docker Hub.
 
 
-###### Pagina de Referencia
+###### Referencia
 > https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-es
