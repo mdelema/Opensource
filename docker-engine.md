@@ -166,6 +166,7 @@ Puede buscar imágenes disponibles en Docker Hub usando el comando docker con el
 docker search ubuntu
 ```
 La secuencia de comandos rastreará Docker Hub y mostrará una lista de todas las imágenes cuyo nombre coincida con la cadena de búsqueda. En este caso, el resultado será similar a lo siguiente:
+
 ```ssh
   Output
   NAME                                                      DESCRIPTION                                     STARS               OFFICIAL            AUTOMATED
