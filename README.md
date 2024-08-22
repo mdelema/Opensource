@@ -1,8 +1,5 @@
 # Opensource
 
-#### Install Docker-Engine 
-#### Install Docker-Compose
-#### Install Kubernetes 
-#### Install Minikube
-#### Docker Delete
-
+#### Docker ((Install / Delete))
+#### Kubernetes (Install / Delete)
+#### Git (GitHub / GitLab)
